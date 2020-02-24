@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken')
 
-const { authSecret } = require('../../config')
 const { TOKEN_EXPIRATION } = require('../../utils/constants')
+
+const authSecret = process.env.AUTH_SECRET
 
 function makeJwt (user) {
   const payloadUser = {

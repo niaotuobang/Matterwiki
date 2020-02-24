@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken')
 const HttpStatus = require('http-status-codes')
 
-const { authSecret } = require('../../config')
 const { setupAll, setupEach, teardownAll } = require('../testUtils/globalSetup')
 
 const { userHolder } = require('../testUtils/modelHolder')
@@ -9,6 +8,8 @@ const { user: userFactory } = require('../factories/factories')
 const { apiClient, testConstants } = require('../testUtils/testUtils')
 
 const { CREDS_WRONG } = require('../../utils/constants').ERRORS
+
+const authSecret = process.env.AUTH_SECRET
 
 describe('Auth API tests', () => {
   beforeAll(setupAll)

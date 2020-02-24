@@ -1,25 +1,15 @@
-const env = process.env.NODE_ENV
-const config = require('dotenv').config({
-  path: `config.${env}.env`
-})
-
-// Config probably not found!
-if (config.error) {
-  throw new Error(config.error)
-}
-
-const connection = {
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER_NAME,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  charset: 'utf8',
-  debug: !!process.env.DB_DEBUGINFO
-}
+require('dotenv').config()
 
 module.exports = {
   client: 'mysql',
-  connection,
+  connection: {
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER_NAME,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    charset: 'utf8',
+    debug: process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'
+  },
   pool: {
     min: 1,
     max: 1

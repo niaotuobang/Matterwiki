@@ -1,5 +1,6 @@
 const express = require('express')
 const helmet = require('helmet')
+const compression = require('compression')
 
 // Sets up the DB, starts the knex connection
 require('./utils/db')
@@ -11,10 +12,7 @@ const errorHandler = require('./middleware/errorHandler')
 const app = express()
 
 app.use(helmet())
-
-// TODO for perf reasons, https://www.npmjs.com/package/compression
-// TODO setup task runner for easier management: https://github.com/lukeed/taskr
-// TODO Maybe use lerna and split client and api dirs into subapps in a mono repo
+app.use(compression())
 
 app.use(appRouter)
 

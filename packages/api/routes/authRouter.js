@@ -9,11 +9,11 @@ const router = express.Router()
 const { JSONParser } = require('../middleware/bodyParser')
 const checkAuth = require('../middleware/checkAuth')
 
-const { authSecret } = require('../config')
-
 const { TOKEN_EXPIRATION, ERRORS } = require('../utils/constants')
 
 const UserModel = require('../models/userModel')
+
+const authSecret = process.env.AUTH_SECRET
 
 const loginUser = async (req, res, next) => {
   const { email, password } = req.body

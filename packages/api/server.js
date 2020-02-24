@@ -1,14 +1,20 @@
-const { server } = require('./config')
+require('dotenv').config()
+
 const app = require('./app')
+const logger = require('./utils/logger')
+const validateConfig = require('./utils/validateConfig')
 
-// TODO use morgan or something for logging
+if (!validateConfig()) {
+    logger.error(`Some/All environment variables not loaded. Did you follow the instructions properly? 😱`);
+    process.exit(9)
+}
 
-console.info('Starting the Matterwiki server..')
+logger.info('Starting the Matterwiki server..')
 
-app.listen(server.port, error => {
+app.listen(process.env.SERVER_PORT, error => {
   if (error) {
-    console.error('Unable to listen for connections', error)
+    logger.error('Unable to listen for connections', error)
     process.exit(10)
   }
-  console.info(`Express is listening on http://${server.ip}:${server.port}`)
+  logger.info(`Express is listening on http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}`)
 })

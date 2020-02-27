@@ -1,6 +1,7 @@
 /**
  * A store that holds model values that can be shared within test suites
- * Stuff like users, tokens are store here
+ * 
+ * TODO: This feels overkill! Definitely re-evaluate!!!!
  */
 
 let userStore = {

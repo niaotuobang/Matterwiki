@@ -1,57 +1,45 @@
-const { knexInstance, dbManager } = require('../../utils/db')
+const { to } = require('await-to-js')
+const { Model } = require('objection')
+const initDbConnection = require('../../utils/initDbConnection')
 
-// TODO move to consts file when there are more
-const ER_DB_CREATE_EXISTS = 'ER_DB_CREATE_EXISTS'
+const knex = initDbConnection()
+Model.knex(knex)
 
 /**
- * Creates DB if it doesn't exist.
- * This is needed because the teardown (`afterAll` block) might not run if some test fails
+ * Sets up test database
  */
-function createDbIfNotExists () {
-  return dbManager
-    .createDbOwnerIfNotExist()
-    .then(() => dbManager.createDb())
-    .catch(err => {
-      // in case something went wrong
-      if (err.code === ER_DB_CREATE_EXISTS) {
-        return dbManager.dropDb().then(() => dbManager.createDb())
-      }
-    })
+async function initTestDb () {
+  // Verify that it exists
+  // 🔗https://github.com/knex/knex/issues/407#issuecomment-52858626
+  const [, verifyError]  = await to(knex.raw(`select 1+1 as result`))
+  if (verifyError) throw new Error(`Test DB was not found. Was it not created?`)
+
+  // Run migrations
+  const [, migrateError] = await to(knex.migrate.latest())
+  if (migrateError) throw new Error(`Migration Failed. Wonder what happened? 🤔`)
 }
 
 /**
- * Cleans up test db between tests
- * Provides options to keep or destroy user table
+ * Start a transaction 
  */
-function truncateDb (keepUsers = true) {
-  // wasteful to `makeTestUsers` before every test
-  const ignoreList = keepUsers ? ['user'] : []
-  return dbManager.truncateDb(ignoreList)
+function startTransaction() {
+  return knex.raw(`start transaction`).catch(() => {
+    // empty, intentional ignored `catch`
+  })
 }
 
 /**
- * Runs the seed on the database
+ * Rolls back transaction
  */
-function seedDb () {
-  return knexInstance.seed.run()
+function rollbackTransaction() {
+  return knex.raw("rollback")
 }
 
 /**
- * Creates the testDb based on the name provided in config.test.env
- * Runs migrations
- * Runs general seed scripts
+ * Seeding the db with the files available in .db/seed
  */
-function initTestDb () {
-  return createDbIfNotExists()
-    .then(() => knexInstance.migrate.latest())
-    .then(() => seedDb())
-}
-
-/**
- * Destroys the Matterwiki test DB, used when all the tests are done
- */
-function destroyTestDb () {
-  return dbManager.createDbOwnerIfNotExist().then(() => dbManager.dropDb())
+async function seedDb() {
+  return knex.seed.run()
 }
 
 /**
@@ -59,7 +47,7 @@ function destroyTestDb () {
  */
 module.exports = {
   initTestDb,
-  destroyTestDb,
-  truncateDb,
-  seedDb
+  seedDb,
+  startTransaction,
+  rollbackTransaction
 }

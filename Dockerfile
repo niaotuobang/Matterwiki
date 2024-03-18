@@ -20,4 +20,4 @@ EXPOSE 5000
 
 VOLUME db
 
-CMD [ "npm", "start" ]
+CMD ["sh", "-c", "NODE_ENV=production node index.js"]

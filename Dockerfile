@@ -1,4 +1,4 @@
-FROM node:18
+FROM node:alpine
 
 RUN mkdir -p /server
 WORKDIR /server
@@ -14,7 +14,7 @@ COPY migrations/ ./migrations
 COPY client/ ./client
 COPY api/ ./api
 
-RUN npm run build
+RUN npm run build && rm -rf /root/.npm
 
 EXPOSE 5000
 

@@ -19,7 +19,17 @@ export default function () {
 	return (
 		<Routes>
 			<Route path="/" element={<App />} />
-			<Route path="/home" element={<Home />} />
+			<Route path="home" element={<Home />} />
+			<Route path="login" element={<Login />} />
+			<Route path="article/new" element={<NewArticle />} />
+			<Route path="article/edit/:articleId" element={<EditArticle />} />
+			<Route path="article/history/:articleId" element={<ArticleHistory />} />
+			<Route path="article/:articleId" element={<Article />} />
+			<Route path="admin" element={<Admin />} />
+			<Route path="topic/edit/:topicId" element={<EditTopic />} />
+			<Route path="user/edit/:userId" element={<EditUser />} />
+			<Route path="search" element={<Search />} />
+			<Route path="setup" element={<Setup />} />
 		</Routes>
 	);
 };

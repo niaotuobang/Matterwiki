@@ -1,28 +1,14 @@
 import React from 'react';
-import { AppContainer } from 'react-hot-loader';
-import {render} from 'react-dom';
-import { Router, hashHistory } from 'react-router';
-
+import ReactDOM from 'react-dom';
+import { createHashHistory } from 'history';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import routes from './routes.jsx';
 
-const renderApp = (appRoutes) => {
-  render(
-    <AppContainer>
-      <Router history={hashHistory}>
-        {appRoutes()}
-      </Router>
-    </AppContainer>,
-    document.getElementById('app')
-  )
-};
+const history = createHashHistory();
 
-
-renderApp(routes);
-
-// react HMR
-if(module.hot) {
-  module.hot.accept('./routes.jsx', () => {
-    const routeChanges = require('./routes.jsx').default;
-    renderApp(routeChanges);
-  })
-}
+ReactDOM.render(
+  <Router history={history} location={history.location} navigator={history}>
+    {routes()}
+  </Router>,
+  document.getElementById('app')
+);

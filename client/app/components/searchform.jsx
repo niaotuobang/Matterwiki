@@ -1,5 +1,6 @@
 import React from 'react';
-import {hashHistory} from 'react-router';
+import { createHashHistory } from 'history';
+const hashHistory = createHashHistory();
 
 class SearchForm extends React.Component {
 
@@ -9,19 +10,19 @@ class SearchForm extends React.Component {
   }
 
   searchWiki() {
-    var results = '/search?query='+this.refs.search.value;
+    var results = '/search?query=' + this.refs.search.value;
     hashHistory.push(results);
   }
 
-  render () {
-      return(
-        <form className="navbar-form navbar-right" onSubmit={this.searchWiki}>
-          <div className="form-group">
-            <input type="text" className="form-control search-input" placeholder="Search" ref="search"/>
-          </div>
-          <button type="submit" className="btn search-button"><i className="fa fa-search"></i></button>
-        </form>
-      );
+  render() {
+    return (
+      <form className="navbar-form navbar-right" onSubmit={this.searchWiki}>
+        <div className="form-group">
+          <input type="text" className="form-control search-input" placeholder="Search" ref="search" />
+        </div>
+        <button type="submit" className="btn search-button"><i className="fa fa-search"></i></button>
+      </form>
+    );
   }
 }
 

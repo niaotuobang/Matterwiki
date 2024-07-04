@@ -18,7 +18,7 @@ import EditUser from './components/edit_users.jsx';
 export default function () {
 	return (
 		<Routes>
-			<Route path="/" element={<App />} />
+			<Route path="/" element={<Login />} />
 			<Route path="home" element={<Home />} />
 			<Route path="login" element={<Login />} />
 			<Route path="article/new" element={<NewArticle />} />
